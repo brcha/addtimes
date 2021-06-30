@@ -6,6 +6,8 @@ cabal-version: 1.12
 
 name:           addtimes
 version:        0.1.0.0
+synopsis:       A small utility to sum up times inputed from stdin
+description:    See README.md
 homepage:       https://github.com/brcha/addtimes#readme
 author:         Filip Brcic
 maintainer:     brcha@yandex.com

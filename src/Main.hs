@@ -1,6 +1,8 @@
+{-# LANGUAGE OverloadedStrings #-}
 module Main where
 
 import           Data.Time
+import           Fmt
 
 main :: IO ()
 main = do
@@ -8,9 +10,12 @@ main = do
   let
     times_list_str = words times_str
     times_list = map read times_list_str
-    diffTimes_list = map timeOfDayToTime times_list
+    diffTimes_list = map (daysAndTimeOfDayToTime 0) times_list
     sum_of_times = sum diffTimes_list
-    sum_str = formatTime defaultTimeLocale "%d days %0H:%0M:%0S" sum_of_times
+    (days, tod) = timeToDaysAndTimeOfDay sum_of_times
+    hours = 24*days + toInteger (todHour tod)
+    minutes = todMin tod
+    seconds = floor $ todSec tod :: Int
 
-  print $ "Sum of times is: " ++ sum_str
+  fmtLn $ "Sum of times is: " +|hours|+ ":" +|minutes|+ ":" +|seconds|+ ""
 

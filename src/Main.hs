@@ -17,5 +17,8 @@ main = do
     minutes = todMin tod
     seconds = floor $ todSec tod :: Int
 
-  fmtLn $ "Sum of times is: " +|hours|+ ":" +|padLeftF 2 '0' minutes|+ ":" +|padLeftF 2 '0' seconds|+ ""
+  fmtLn $ "Sum of times is: " +|
+            padLeftF 2 '0' hours|+ ":" +|
+            padLeftF 2 '0' minutes|+ ":" +|
+            padLeftF 2 '0' seconds|+ ""
 

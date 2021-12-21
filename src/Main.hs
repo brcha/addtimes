@@ -1,21 +1,28 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Main where
 
-import           Data.Time
+import qualified Data.ByteString.Char8 as C
 import           Fmt
+
+sumTimes :: (Int, Int, Int) -> [Int] -> (Int, Int, Int)
+sumTimes (acch, accm, accs) l = (resh, resm, ress)
+  where
+    [h, m, s] = take 3 l
+    sums = accs + s
+    ress = sums `mod` 60
+    summ = accm + m + (sums `div` 60)
+    resm = summ `mod` 60
+    resh = acch + h + (summ `div` 60)
 
 main :: IO ()
 main = do
-  times_str <- getContents
+  times_str <- C.getContents
   let
-    times_list_str = words times_str
-    times_list = map read times_list_str
-    diffTimes_list = map (daysAndTimeOfDayToTime 0) times_list
-    sum_of_times = sum diffTimes_list
-    (days, tod) = timeToDaysAndTimeOfDay sum_of_times
-    hours = 24*days + toInteger (todHour tod)
-    minutes = todMin tod
-    seconds = floor $ todSec tod :: Int
+    times_list_str = C.words times_str
+    times_list_parts = map (C.split ':') times_list_str
+    times_list_parts_str = map (map C.unpack) times_list_parts
+    times_list_parts_parsed = map (map read) times_list_parts_str :: [[Int]]
+    (hours, minutes, seconds) = foldl sumTimes (0, 0, 0) times_list_parts_parsed
 
   fmtLn $ "Sum of times is: " +|
             padLeftF 2 '0' hours|+ ":" +|
